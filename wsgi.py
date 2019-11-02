@@ -21,7 +21,7 @@ app.config.update(
 
 mail = Mail(app)
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     msg = Message('New message from Portfolio website',
                   sender='huishunchua@gmail.com',
