@@ -1,4 +1,5 @@
-from flask import Flask
+import flask
+from flask import Flask, request
 from flask_mail import Mail, Message
 import os
 from os import getenv
@@ -23,12 +24,20 @@ mail = Mail(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    print('username', getenv('MAIL_USERNAME', None))
-    print('password', getenv('MAIL_PASSWORD', None))
+    if flask.request.method == 'GET':
+        return 'Sorry, this service only allows POST requests.'
     msg = Message('New message from Portfolio website',
-                  sender='huishunchua@gmail.com',
-                  recipients=[getenv('MAIL_USERNAME', None)])
-    msg.body = 'huehue'
+                  sender=getenv('MAIL_USERNAME', None),
+                  recipients=[getenv('RECIPIENT_EMAIL', None)])
+    name = request.form.get('name')
+    email = request.form.get('email')
+    content = request.form.get('message')
+    msg.body = 'Name: {name}\r\nEmail: {email}\r\nMessage: {content}'.format(
+        name=name,
+        email=email,
+        content=content
+    )
+    print(msg.body)
     mail.send(msg)
     return 'Message sent!'
 
