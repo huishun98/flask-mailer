@@ -5,6 +5,7 @@ import os
 from os import getenv
 from dotenv import load_dotenv
 from flask_cors import cross_origin
+import json
 
 app = Flask(__name__)
 
@@ -23,24 +24,25 @@ app.config.update(
 
 mail = Mail(app)
 
-cross_origin(["http://localhost:8080/", "https://hs-portfolio.herokuapp.com"]) 
 
 @app.route('/', methods=['GET', 'POST'])
+@cross_origin([getenv('LOCAL_HOST', None), getenv('APP_HOST', None)])
 def index():
     if flask.request.method == 'GET':
         return 'Sorry, this service only allows POST requests.'
+
+    jsonResponse = json.loads(request.data.decode('utf-8'))
     msg = Message('New message from Portfolio website',
                   sender=getenv('MAIL_USERNAME', None),
                   recipients=[getenv('RECIPIENT_EMAIL', None)])
-    name = request.form.get('name')
-    email = request.form.get('email')
-    content = request.form.get('message')
+    name = jsonResponse.get('name')
+    email = jsonResponse.get('email')
+    content = jsonResponse.get('message')
     msg.body = 'Name: {name}\r\nEmail: {email}\r\nMessage: {content}'.format(
         name=name,
         email=email,
         content=content
     )
-    print(msg.body)
     mail.send(msg)
     return 'Message sent!'
 
