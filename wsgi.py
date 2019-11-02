@@ -4,6 +4,7 @@ from flask_mail import Mail, Message
 import os
 from os import getenv
 from dotenv import load_dotenv
+from flask_cors import cross_origin
 
 app = Flask(__name__)
 
@@ -21,6 +22,8 @@ app.config.update(
 )
 
 mail = Mail(app)
+
+cross_origin(["http://localhost:8080/", "https://hs-portfolio.herokuapp.com"]) 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
