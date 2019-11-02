@@ -23,6 +23,8 @@ mail = Mail(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    print('username', getenv('MAIL_USERNAME', None))
+    print('password', getenv('MAIL_PASSWORD', None))
     msg = Message('New message from Portfolio website',
                   sender='huishunchua@gmail.com',
                   recipients=[getenv('MAIL_USERNAME', None)])
