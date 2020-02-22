@@ -13,7 +13,7 @@ This is a simple Flask application that receives POST requests to send emails to
 
 2. Download the required libraries
 ~~~
-pip install -r requirements.txt --no-index
+pip install -r requirements.txt
 ~~~
 
 3. Run the app
